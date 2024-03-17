@@ -25,7 +25,7 @@ mongoose.connect("mongodb://localhost:27017/Healthy").then(()=>{
 })
 
 app.use(cors({
-    origin: ['http://localhost:5173' ]
+    origin: ['http://localhost:5173' , 'http://localhost:4200' ]
   }));
 // app.use(express.static('public'));
 app.use("/uploads" , express.static('uploads'))
