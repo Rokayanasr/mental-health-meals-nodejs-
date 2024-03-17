@@ -1,7 +1,5 @@
 /node_modules
-
+/.env
 .env.example
 .env
-
-.env
-.env
+/uploads
