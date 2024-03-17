@@ -38,7 +38,7 @@ const DeleteUser=async(_userId)=>{
      console.log(e);
   }
 }
-const updateUser= async(userId, _name , _email , _password)=>{
+const updateUser= async(userId, _name , _email , _password , _isAdmin)=>{
  try{
     console.log(userId,_name,_email,_password);
     let data = await User.updateOne(
@@ -48,6 +48,7 @@ const updateUser= async(userId, _name , _email , _password)=>{
                     name: _name,
                     email: _email,
                     password: _password,
+                    isAdmin: _isAdmin
                   },
                 }
               );
