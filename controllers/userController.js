@@ -18,6 +18,8 @@ const getUserById = async(Id)=>{
         if(user){
             console.log(user);
             return user
+        }else{
+          console.log("user not exists")
         }
     }catch(e){
   console.log(e);

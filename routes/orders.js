@@ -61,6 +61,7 @@ router.get("/", isAdmin, async (req, res) => {
   try {
     const orders = await Order.find();
     res.status(200).send(orders);
+    // console.log(orders)
   } catch (err) {
     res.status(500).send(err);
   }

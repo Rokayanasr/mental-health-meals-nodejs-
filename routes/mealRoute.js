@@ -200,22 +200,22 @@ route.get("/get-all", async (req, res) => {
 })
 
 
-route.get('/getItemById/:id', async (req, res) => {
+route.get('/getItemById/:id',async (req, res) => {
     console.log("route getItemById");
     const id = req.params.id;
     // console.log(id);
     const meal = await mealController.getItemById(id);
     console.log(meal);
     if (meal) {
-        res.status(200)
-        res.json({
-            items: meal,
-            msg: "ok"
-        })
+      res.status(200)
+      res.json({
+        items:meal,
+        msg:"ok"
+    })
     } else {
-        res.status(404).json({ message: 'Meal not found' });
+      res.status(404).json({ message: 'Meal not found' });
     }
-});
+  });
 
 
 route.delete('/delete-item/:Id', async (req, res) => {
@@ -238,9 +238,15 @@ route.patch('/edit-item/:id', upload.single('imageFile'), async (req, res) => {
     console.log(req.params.id);
     console.log(req.body);
     try {
-        if (req.file && !req.file.empty) { // Check if req.file exists and is not empty
-            let imageFile = "http://localhost:3000/uploads/" + req.file.filename;
-            let { id } = req.params; // Extract id from req.params
+        let imageFile;
+        let { id } = req.params;
+        if (req.file) { // Check if req.file exists and is not empty
+            imageFile = "http://localhost:3000/uploads/" + req.file.filename;
+        }else{
+            let item = await mealController.GetOneById(id)
+            imageFile = item.imageFile
+        }
+             // Extract id from req.params
             // let { title, category, description, price, ingrediants, } = req.body;
             let { title, category, price,description} = req.body;
 
@@ -248,11 +254,7 @@ route.patch('/edit-item/:id', upload.single('imageFile'), async (req, res) => {
             let data = await mealController.editItem(id, title, category, price,description, imageFile)
 
             res.status(200).json({ items: data, msg: "item was updated" });
-        } else {
-            console.log('File not uploaded');
-            // Handle the case where no file was uploaded
-            res.status(400).json({ error: 'File not uploaded' });
-        }
+        
     } catch (e) {
         console.error(e);
         res.status(500).send('server error');

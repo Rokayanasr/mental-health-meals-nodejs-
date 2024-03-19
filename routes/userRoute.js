@@ -18,7 +18,7 @@ route.get('/getuser/:id', async (req, res) => {
     try {
         let Id = req.params.id
         let data = await userController.getUserById(Id)
-        console.log(Id);
+        console.log(data);
         res.status(200).send(data);
     } catch (e) {
         console.log(e);

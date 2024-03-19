@@ -215,6 +215,18 @@ const editItem = async (
   }
 };
 
+const getItemById= async(id)=>{
+  try{
+    // console.log(id +"function getItemById");
+    let data = await Meal.findOne({_id : id})
+    // console.log(data);
+    return data
+  }
+  catch(error){
+  console.log(error);
+  }
+}
+
 const filterMealsCat = async (_category) => {
   try {
     const data = await Meal.find({ category: _category });
@@ -263,4 +275,5 @@ module.exports = {
   editItem,
   filterMealsCat,
   filterMealsPri,
+  getItemById
 };

@@ -98,7 +98,7 @@ router.post('/create-checkout-session', async (req, res) => {
             allow_promotion_codes: true,
             mode: 'payment',
             success_url: `${process.env.CLIENT_URL}/checkout-success`,
-            cancel_url: `${process.env.CLIENT_URL}/meals`,
+            cancel_url: `${process.env.CLIENT_URL}/cancel`,
         });
 
         // Send the URL of the created session back to the client
