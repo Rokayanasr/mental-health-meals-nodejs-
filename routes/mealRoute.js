@@ -243,7 +243,8 @@ route.patch('/edit-item/:id', upload.single('imageFile'), async (req, res) => {
         if (req.file) { // Check if req.file exists and is not empty
             imageFile = "http://localhost:3000/uploads/" + req.file.filename;
         }else{
-            let item = await mealController.GetOneById(id)
+            let item = await mealController.getItemById(id)
+            console.log(item.imageFile)
             imageFile = item.imageFile
         }
              // Extract id from req.params

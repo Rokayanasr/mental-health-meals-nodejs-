@@ -95,4 +95,102 @@ router.get("/income", isAdmin, async (req, res) => {
   }
 });
 
+
+// Route to calculate total monthly sales
+router.get("/total-monthly-sales", async (req, res) => {
+  try {
+    // Get the current date and the date of the previous month
+    const currentDate = new Date();
+    const previousMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
+    
+    // Calculate the total monthly sales using aggregation
+    const result = await Order.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: previousMonthDate, $lt: currentDate } // Filter orders from the previous month
+        }
+      },
+      {
+        $group: {
+          _id: null, // Group all orders
+          totalSales: { $sum: "$total" } // Calculate the sum of total sales
+        }
+      }
+    ]);
+
+    // Send the total monthly sales as a response
+    res.status(200).json({ totalMonthlySales: result.length > 0 ? result[0].totalSales : 0 });
+  } catch (error) {
+    // Handle errors
+    console.error("Error calculating total monthly sales:", error);
+    res.status(500).json({ error: "An error occurred while calculating total monthly sales." });
+  }
+});
+
+
+// Route to calculate total yearly sales
+router.get("/total-yearly-sales", async (req, res) => {
+  try {
+    // Get the current date and the date of the previous year
+    const currentDate = new Date();
+    const previousYearDate = new Date(currentDate.getFullYear() - 1, 0, 1);
+
+    // Calculate the total yearly sales using aggregation
+    const result = await Order.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: previousYearDate, $lt: currentDate } // Filter orders from the previous year
+        }
+      },
+      {
+        $group: {
+          _id: null, // Group all orders
+          totalSales: { $sum: "$total" } // Calculate the sum of total sales
+        }
+      }
+    ]);
+
+    // Send the total yearly sales as a response
+    res.status(200).json({ totalYearlySales: result.length > 0 ? result[0].totalSales : 0 });
+  } catch (error) {
+    // Handle errors
+    console.error("Error calculating total yearly sales:", error);
+    res.status(500).json({ error: "An error occurred while calculating total yearly sales." });
+  }
+});
+
+
+router.get("/total-daily-sales", async (req, res) => {
+  try {
+    // Get the current date and the start of the day
+    const currentDate = new Date();
+    const startOfDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+
+    // Get the end of the day
+    const endOfDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 1);
+
+    // Calculate the total daily sales using aggregation
+    const result = await Order.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: startOfDay, $lt: endOfDay } // Filter orders for the current day
+        }
+      },
+      {
+        $group: {
+          _id: null, // Group all orders
+          totalSales: { $sum: "$total" } // Calculate the sum of total sales
+        }
+      }
+    ]);
+
+    // Send the total daily sales as a response
+    res.status(200).json({ totalDailySales: result.length > 0 ? result[0].totalSales : 0 });
+  } catch (error) {
+    // Handle errors
+    console.error("Error calculating total daily sales:", error);
+    res.status(500).json({ error: "An error occurred while calculating total daily sales." });
+  }
+});
+
 module.exports = router;

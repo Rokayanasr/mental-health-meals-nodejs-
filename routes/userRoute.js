@@ -18,7 +18,7 @@ route.get('/getuser/:id', async (req, res) => {
     try {
         let Id = req.params.id
         let data = await userController.getUserById(Id)
-        console.log(data);
+        // console.log(data);
         res.status(200).send(data);
     } catch (e) {
         console.log(e);
@@ -43,8 +43,8 @@ route.patch('/edit/:userId', async (req, res) => {
 
         let data = await userController.updateUser(userId, name, email, hashedpassword, isAdmin)
 
-        console.log(req.body);
-        console.log(data);
+        // console.log(req.body);
+        // console.log(data);
         res.send(data + " this user was updated")
     } catch (e) {
         console.log(e);
