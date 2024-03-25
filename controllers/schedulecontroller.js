@@ -46,19 +46,19 @@ const DeleteDay=async (_userId , scheduleId)=>{
      console.log(e);
   }
 }
-const updateChecked=async (scheduleId)=>{
-  try{
-          let scheduleData = await Schedule.updateOne({_id:scheduleId,"details.hour": 22 }
-        ,{
-          $set: { "details.$.done": true } 
-        })
-      if (scheduleData) {
-        console.log('was update successfully');
-      }
-    
-  }catch(e){
-     console.log(e);
+const updateChecked = async (scheduleId, _hour) => {
+  console.log(scheduleId, _hour);
+  let scheduleData = await Schedule.findOne({ _id: scheduleId });
+  for (var i = 0; i < scheduleData.details.length; i++) {
+    if (scheduleData.details[i].hour == _hour) {
+      scheduleData.details[i].done = true;
+    }
   }
-}
+  let updatedata = await Schedule.updateOne(
+    { _id: scheduleId },
+    { $set: { details: scheduleData.details } }
+  );
+  return updatedata;
+};
 
 module.exports={createOneDaySchedule, getAllDaysforUser ,DeleteDay ,updateChecked}

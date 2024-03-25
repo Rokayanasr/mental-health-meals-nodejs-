@@ -8,7 +8,7 @@ require("dotenv").config();
 
 const { auth } = require("../middleware/auth");
 const openai = new OpenAi({
-    apiKey : process.env.OPEN_AI_KEY // from another account 
+    apiKey : process.env.OPEN_AI_KEY // from another account
     
 })
 route.post('/addSchedule/:id',async(req, res)=>{

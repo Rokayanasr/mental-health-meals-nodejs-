@@ -3,6 +3,7 @@ const Coach = require('../models/coachModel');
 let User = require("../models/user")
 let Meal = require("../models/meal")
 let CoachSch = require("../models/coachSchModel")
+const bcrypt = require('bcrypt')
 
 //1-createCoach
 
@@ -10,14 +11,30 @@ exports.createCoach = async (req, res) => {
     try {
         console.log(req.body);
         const { name, email, password, isAdmin } = req.body;
-        console.log(name);
-        const newCoach = new Coach({ name, email, password, isAdmin });
+
+        // Generate salt
+        const salt = await bcrypt.genSalt(10);
+
+        // Hash the password using the generated salt
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        console.log(hashedPassword);
+
+        // Create a new Coach object with the hashed password
+        const newCoach = new Coach({ name, email, password: hashedPassword, isAdmin });
+
+        // Save the new coach to the database
         const savedCoach = await newCoach.save();
+
+        // Return the saved coach as JSON response
         res.json(savedCoach);
     } catch (error) {
+        // Handle any errors that occur during the hashing process
+        console.error("Error in creating coach:", error);
         res.status(400).json({ message: error.message });
     }
 };
+
 
 //2-deleteCoach
 exports.deleteCoach = async (req, res) => {
@@ -36,6 +53,7 @@ exports.deleteCoach = async (req, res) => {
 exports.getAllCoaches = async (req, res) => {
     try {
         const coaches = await Coach.find();
+        console.log(coaches)
         res.json(coaches);
     } catch (error) {
         res.status(500).json({ message: error.message });
