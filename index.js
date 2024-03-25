@@ -12,7 +12,7 @@ const userRoute = require('./routes/userRoute')
 // const meals = require("./meals");
 const mealRoute = require("./routes/mealRoute")
 const coachRoute = require("./routes/coachRoute")
-// const scheduleRoute=require('./routes/scheduleroute')
+const scheduleRoute=require('./routes/scheduleroute')
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
@@ -45,7 +45,7 @@ app.use("/api/stripe", stripe)
 app.use('/meals', mealRoute)
 app.use('/coach', coachRoute)
 
-// app.use('/schedule',scheduleRoute)
+app.use('/schedule',scheduleRoute)
 
 app.get("/meals", (req, res) => {
   res.send(meals);
